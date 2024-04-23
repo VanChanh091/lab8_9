@@ -8,25 +8,43 @@ import {
   View,
   Image,
   FlatList,
+  Alert,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import Categories from "../api/ApiCategories";
 import Courses from "../api/ApiCourses";
 import Recommend from "../api/ApiRecommend";
-import CoursesInspires from "../api/Api5";
-import topTeacher from "../api/ApiTeacher";
+import axios from "axios";
 
 const Index = () => {
-  const navigation = useNavigation();
+  //getApi
+  const [teacher, setTeacher] = useState([]);
+  const [coursesInspires, setCoursesInspires] = useState([]);
+
+  //Teacher
+  const [imageTeacher, setImageTeacher] = useState("");
+  const [nameTeacher, setNameTeacher] = useState("");
+  const [school, setSchool] = useState("");
+  const [rate, setRate] = useState("");
+  const [review, setReview] = useState("");
+
+  //Course Inspires
+  const [imageCourse, setImageCourse] = useState("");
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [price, setPrice] = useState("");
+  const [rateCourse, setRateCourse] = useState("");
+  const [reviewCourse, setReviewCourse] = useState("");
+  const [lesson, setLesson] = useState("");
 
   const listCategories = ({ item }) => (
     <TouchableOpacity
       style={{
-        width: "50%",
+        width: "48%",
         height: 65,
-        borderBottomWidth: 1,
+        borderWidth: 0.5,
+        borderRadius: 10,
         borderColor: "gray",
         justifyContent: "space-between",
         flexDirection: "row",
@@ -35,7 +53,7 @@ const Index = () => {
     >
       <View
         style={{
-          flex: 3.5,
+          flex: 4,
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -43,15 +61,15 @@ const Index = () => {
         <Image
           source={item.image}
           style={{
-            width: "90%",
-            height: "90%",
+            width: "85%",
+            height: "85%",
             resizeMode: "contain",
           }}
         />
       </View>
       <View
         style={{
-          flex: 6.5,
+          flex: 6,
           justifyContent: "center",
           paddingLeft: 10,
         }}
@@ -231,7 +249,7 @@ const Index = () => {
         borderColor: "gray",
         marginTop: 15,
         flexDirection: "row",
-        borderColor:"gray"
+        borderColor: "gray",
       }}
     >
       <View
@@ -246,11 +264,26 @@ const Index = () => {
           style={{ width: "80%", height: "80%", resizeMode: "contain" }}
         />
       </View>
-      <View style={{ flex: 5, }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18, marginLeft: 5, marginTop: 10, }}>
+      <View style={{ flex: 5 }}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 18,
+            marginLeft: 5,
+            marginTop: 10,
+          }}
+        >
           {item.title}
         </Text>
-        <Text style={{ color: "gray", fontSize: 14, marginTop: 3,marginLeft: 5, marginTop: 5,}}>
+        <Text
+          style={{
+            color: "gray",
+            fontSize: 14,
+            marginTop: 3,
+            marginLeft: 5,
+            marginTop: 5,
+          }}
+        >
           {item.author}
         </Text>
         <Text
@@ -264,29 +297,27 @@ const Index = () => {
         >
           ${item.price}
         </Text>
-        <View style={{flexDirection: "row", marginTop: 5, marginLeft: 5, }}>
-            <View
-              style={{
-                flex: 1.5,
-                justifyContent: "center",
-              }}
-            >
-              <Ionicons name="star-outline" size={22} color="black" />
-            </View>
-            <View
-              style={{ flex: 8.5, flexDirection: "row", alignItems: "center" }}
-            >
-              <Text style={{ fontSize: 15 }}>{item.rate} </Text>
-              <Text style={{ fontSize: 15, color: "gray" }}>
-                ({item.review})
-              </Text>
-              <Text style={{ fontSize: 15 }}> - {item.lesson}</Text>
-              <Text style={{ fontSize: 15, color: "gray" }}> lessons</Text>
-            </View>
+        <View style={{ flexDirection: "row", marginTop: 5, marginLeft: 5 }}>
+          <View
+            style={{
+              flex: 1.5,
+              justifyContent: "center",
+            }}
+          >
+            <Ionicons name="star-outline" size={22} color="black" />
           </View>
+          <View
+            style={{ flex: 8.5, flexDirection: "row", alignItems: "center" }}
+          >
+            <Text style={{ fontSize: 15 }}>{item.rate} </Text>
+            <Text style={{ fontSize: 15, color: "gray" }}>({item.review})</Text>
+            <Text style={{ fontSize: 15 }}> - {item.lesson}</Text>
+            <Text style={{ fontSize: 15, color: "gray" }}> lessons</Text>
+          </View>
+        </View>
       </View>
-      
-      <View style={{ flex: 1, alignItems:'center', marginTop: 15}}>
+
+      <View style={{ flex: 1, alignItems: "center", marginTop: 15 }}>
         <TouchableOpacity>
           <Ionicons name="bookmark-outline" size={30} color="black" />
         </TouchableOpacity>
@@ -347,10 +378,91 @@ const Index = () => {
     </TouchableOpacity>
   );
 
+  useEffect(() => {
+    axios
+      .get(`https://6627001fb625bf088c071863.mockapi.io/topTeacher`)
+      .then((response) => {
+        setTeacher(response.data);
+        console.log("Data teacher: ", teacher);
+      })
+      .catch((error) => {
+        console.log("error retrieving Teacher: ", error);
+      });
+
+    axios
+      .get(`https://6627001fb625bf088c071863.mockapi.io/courseInspire`)
+      .then((response) => {
+        setCoursesInspires(response.data);
+        console.log("Data Course: ", coursesInspires);
+      })
+      .catch((error) => {
+        console.log("error retrieving Course: ", error);
+      });
+  }, []);
+
+  // const handleAddTeacher = () => {
+  //   const teacher = {
+  //     image: imageTeacher,
+  //     name: nameTeacher,
+  //     school: school,
+  //     rate: rate,
+  //     review: review,
+  //   }
+  //   axios.post(`https://6627001fb625bf088c071863.mockapi.io/topTeacher`, teacher)
+  //   .then((response) => {
+  //     console.log(response);
+  //     Alert.alert("Add Teacher successful",);
+  //     setImageTeacher("");
+  //     setNameTeacher("");
+  //     setSchool("");
+  //     setRate("");
+  //     setReview("");
+  //   })
+  //   .catch((error) => {
+  //     Alert.alert(
+  //       "Add Teacher Error",
+  //     );
+  //     console.log("Add Teacher failed", error);
+  //   });
+  // };
+
+  // const handleAddCourse = () => {
+  //   const course = {
+  //     image: imageCourse,
+  //     title: title,
+  //     author: author,
+  //     price: price,
+  //     rate: rateCourse,
+  //     review: reviewCourse,
+  //     lesson: lesson,
+  //   }
+  //   axios.post(`https://6627001fb625bf088c071863.mockapi.io/courseInspire`, course)
+  //   .then((response) => {
+  //     console.log(response);
+  //     Alert.alert("Add Teacher successful");
+  //     setImageCourse("");
+  //     setTitle("");
+  //     setAuthor("");
+  //     setPrice("");
+  //     setRate("");
+  //     setReview("");
+  //     setLesson("");
+  //   })
+  //   .catch((error) => {
+  //     Alert.alert(
+  //       "Add Course Error",
+  //     );
+  //     console.log("Add Course failed", error);
+  //   });
+  // };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <TopScreen/> */}
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        removeClippedSubviews={true}
+      >
         <View style={{ width: "100%", height: 330 }}>
           <View
             style={{
@@ -538,6 +650,8 @@ const Index = () => {
           </View>
           <View style={{ width: "90%", height: 250 }}>
             <FlatList
+              scrollEnabled={false}
+              columnWrapperStyle={{ flex: 1, justifyContent: "space-between" }}
               data={Categories}
               keyExtractor={(item) => item.id}
               numColumns={2}
@@ -577,6 +691,7 @@ const Index = () => {
           </View>
           <View style={{ width: "100%", height: 250 }}>
             <FlatList
+              // scrollEnabled={false}
               data={Courses}
               keyExtractor={(item) => item.id}
               horizontal={true}
@@ -615,6 +730,7 @@ const Index = () => {
           </View>
           <View style={{ width: "100%", height: 250 }}>
             <FlatList
+              scrollEnabled={false}
               data={Recommend}
               keyExtractor={(item) => item.id}
               horizontal={true}
@@ -653,7 +769,8 @@ const Index = () => {
           </View>
           <View style={{ width: "90%", height: 520 }}>
             <FlatList
-              data={CoursesInspires}
+              scrollEnabled={false}
+              data={coursesInspires}
               keyExtractor={(item) => item.id}
               renderItem={listCourseInspires}
             />
@@ -684,13 +801,14 @@ const Index = () => {
               style={{ paddingRight: 5, justifyContent: "center" }}
             >
               <Text style={{ color: "blue", fontWeight: 300, fontSize: 16 }}>
-                View more
+                Add Teacher
               </Text>
             </TouchableOpacity>
           </View>
           <View style={{ width: "100%", height: 250 }}>
             <FlatList
-              data={topTeacher}
+              scrollEnabled={false}
+              data={teacher}
               keyExtractor={(item) => item.id}
               horizontal={true}
               renderItem={listTeacher}
@@ -698,7 +816,7 @@ const Index = () => {
           </View>
         </View>
 
-        <View style={{ width: "100%", height: 30 }}></View>
+        <View style={{ width: "100%", height: 15 }}></View>
       </ScrollView>
       <StatusBar />
     </SafeAreaView>
