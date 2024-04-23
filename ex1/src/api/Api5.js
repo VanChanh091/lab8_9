@@ -16,7 +16,7 @@ const Courses = [
         author: "Ruth Dominguez",
         price: 19,
         rate: 4.5,
-        review: 33,
+        review: 333,
         lesson: 17,
     },
     {

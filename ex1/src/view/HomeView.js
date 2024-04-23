@@ -221,13 +221,131 @@ const Index = () => {
     </TouchableOpacity>
   );
 
-  const listCourseInspires = ({item}) => (
-    <View></View>
-  )
+  const listCourseInspires = ({ item }) => (
+    <TouchableOpacity
+      style={{
+        width: "100%",
+        height: 150,
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: "gray",
+        marginTop: 15,
+        flexDirection: "row",
+        borderColor:"gray"
+      }}
+    >
+      <View
+        style={{
+          flex: 3.5,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={item.image}
+          style={{ width: "80%", height: "80%", resizeMode: "contain" }}
+        />
+      </View>
+      <View style={{ flex: 5, }}>
+        <Text style={{ fontWeight: "bold", fontSize: 18, marginLeft: 5, marginTop: 10, }}>
+          {item.title}
+        </Text>
+        <Text style={{ color: "gray", fontSize: 14, marginTop: 3,marginLeft: 5, marginTop: 5,}}>
+          {item.author}
+        </Text>
+        <Text
+          style={{
+            fontWeight: "bold",
+            color: "blue",
+            fontSize: 18,
+            marginLeft: 5,
+            marginTop: 5,
+          }}
+        >
+          ${item.price}
+        </Text>
+        <View style={{flexDirection: "row", marginTop: 5, marginLeft: 5, }}>
+            <View
+              style={{
+                flex: 1.5,
+                justifyContent: "center",
+              }}
+            >
+              <Ionicons name="star-outline" size={22} color="black" />
+            </View>
+            <View
+              style={{ flex: 8.5, flexDirection: "row", alignItems: "center" }}
+            >
+              <Text style={{ fontSize: 15 }}>{item.rate} </Text>
+              <Text style={{ fontSize: 15, color: "gray" }}>
+                ({item.review})
+              </Text>
+              <Text style={{ fontSize: 15 }}> - {item.lesson}</Text>
+              <Text style={{ fontSize: 15, color: "gray" }}> lessons</Text>
+            </View>
+          </View>
+      </View>
+      
+      <View style={{ flex: 1, alignItems:'center', marginTop: 15}}>
+        <TouchableOpacity>
+          <Ionicons name="bookmark-outline" size={30} color="black" />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
 
-  const listTeacher = ({item}) => (
-    <View></View>
-  )
+  const listTeacher = ({ item }) => (
+    <TouchableOpacity
+      style={{
+        width: 200,
+        height: 220,
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: "gray",
+        marginLeft: 15,
+        marginTop: 7,
+        marginRight: 7,
+      }}
+    >
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image source={item.image} style={{ width: 170, height: 100 }} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            marginLeft: 12,
+            marginTop: 5,
+          }}
+        >
+          {item.name}
+        </Text>
+        <Text style={{ marginLeft: 12, marginTop: 5, fontSize: 15 }}>
+          {item.school}
+        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            marginLeft: 12,
+            marginTop: 5,
+            alignItems: "center",
+          }}
+        >
+          <Ionicons name="star-outline" size={22} color="black" />
+          <Text style={{ fontSize: 14, paddingLeft: 5 }}>
+            {item.rate} ({item.review})
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -471,7 +589,6 @@ const Index = () => {
           style={{
             width: "100%",
             height: 300,
-            borderBottomWidth: 1,
             alignItems: "center",
           }}
         >
@@ -509,8 +626,7 @@ const Index = () => {
         <View
           style={{
             width: "100%",
-            height: 500,
-            borderBottomWidth: 1,
+            height: 570,
             alignItems: "center",
           }}
         >
@@ -535,7 +651,7 @@ const Index = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{ width: "90%", height: 450 }}>
+          <View style={{ width: "90%", height: 520 }}>
             <FlatList
               data={CoursesInspires}
               keyExtractor={(item) => item.id}
@@ -545,8 +661,42 @@ const Index = () => {
         </View>
 
         <View
-          style={{ width: "100%", height: 250, borderBottomWidth: 1 }}
-        ></View>
+          style={{
+            width: "100%",
+            height: 300,
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              height: 50,
+              justifyContent: "space-between",
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ justifyContent: "center", paddingLeft: 5 }}>
+              <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+                Top Teachers
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={{ paddingRight: 5, justifyContent: "center" }}
+            >
+              <Text style={{ color: "blue", fontWeight: 300, fontSize: 16 }}>
+                View more
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: "100%", height: 250 }}>
+            <FlatList
+              data={topTeacher}
+              keyExtractor={(item) => item.id}
+              horizontal={true}
+              renderItem={listTeacher}
+            />
+          </View>
+        </View>
 
         <View style={{ width: "100%", height: 30 }}></View>
       </ScrollView>
